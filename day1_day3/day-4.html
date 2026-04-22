@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Python & GitHub Journey — Day 4</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #080c10;
+    --bg2:       #0d1117;
+    --bg3:       #111820;
+    --border:    #1e2a38;
+    --text:      #cdd9e5;
+    --muted:     #768a9a;
+    --accent:    #FBBF24;   /* yellow — Day 4 */
+    --accent-dim: color-mix(in srgb, #FBBF24 12%, transparent);
+    --code-bg:   #0a0f14;
+    --mono:      'JetBrains Mono', monospace;
+    --serif:     'Lora', Georgia, serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  /* noise */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(8,12,16,.93);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 1.5rem;
+    padding: .85rem 2.5rem;
+  }
+  .logo {
+    font-family: var(--mono); font-size: .72rem;
+    letter-spacing: .18em; color: var(--muted);
+    text-transform: uppercase; white-space: nowrap;
+  }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; margin-left: auto; }
+  .nav-links a {
+    font-family: var(--mono); font-size: .72rem;
+    letter-spacing: .1em; text-decoration: none;
+    color: var(--muted); transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    padding: 5rem 2.5rem 4rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, color-mix(in srgb, #FBBF24 7%, transparent), transparent);
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .3em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1.2rem;
+  }
+  .hero h1 {
+    font-family: var(--serif); font-weight: 600;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.15; color: #e8edf2; margin-bottom: .75rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero .sub {
+    font-size: 1rem; color: var(--muted);
+    font-style: italic; margin-bottom: 2.5rem;
+  }
+  .badge-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .badge {
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .08em;
+    padding: .35rem 1.1rem; border-radius: 999px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* ── LAYOUT ── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 820px; margin: 0 auto;
+    padding: 3.5rem 2rem 6rem;
+  }
+
+  /* ── RECAP BOX ── */
+  .recap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--accent);
+    border-radius: 0 0 4px 4px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 3rem;
+  }
+  .recap-label {
+    font-family: var(--mono); font-size: .65rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .75rem;
+  }
+  .recap pre { margin: 0; }
+
+  /* ── STEP ── */
+  .step { margin-bottom: 3rem; animation: fadeUp .45s ease both; }
+  .step:nth-child(1)  { animation-delay: .05s; }
+  .step:nth-child(2)  { animation-delay: .10s; }
+  .step:nth-child(3)  { animation-delay: .15s; }
+  .step:nth-child(4)  { animation-delay: .20s; }
+  .step:nth-child(5)  { animation-delay: .25s; }
+  .step:nth-child(6)  { animation-delay: .30s; }
+  .step:nth-child(7)  { animation-delay: .35s; }
+  .step:nth-child(8)  { animation-delay: .40s; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .step-heading {
+    display: flex; align-items: center; gap: .8rem;
+    margin-bottom: 1rem;
+    padding-bottom: .75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-num {
+    font-family: var(--mono); font-size: .62rem;
+    letter-spacing: .14em; color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    background: var(--accent-dim);
+    border-radius: 3px; padding: .18rem .55rem;
+    flex-shrink: 0;
+  }
+  .step h3 { font-size: 1.05rem; font-weight: 600; color: #dde5ed; }
+
+  p { margin-bottom: .9rem; color: var(--text); }
+
+  /* ── CODE ── */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.1rem 1.3rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.2rem;
+  }
+  pre code {
+    font-family: var(--mono);
+    font-size: .82rem; line-height: 1.65;
+    color: #a8c7e8;
+  }
+  code {
+    font-family: var(--mono); font-size: .82em;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 3px; padding: .1em .4em;
+    color: #a8c7e8;
+  }
+  pre code { background: transparent; border: none; padding: 0; }
+
+  /* diff colours */
+  .diff-add  { color: #4ade80; }
+  .diff-del  { color: #f87171; }
+  .diff-info { color: var(--muted); }
+
+  /* ── TABLES ── */
+  .table-wrap { overflow-x: auto; margin: 1rem 0 1.5rem; }
+  table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: .78rem; }
+  th {
+    text-align: left; padding: .6rem .9rem;
+    background: var(--bg3); border: 1px solid var(--border);
+    color: var(--muted); letter-spacing: .08em;
+    text-transform: uppercase; font-size: .65rem;
+  }
+  td { padding: .65rem .9rem; border: 1px solid var(--border); color: var(--text); vertical-align: top; }
+  tr:hover td { background: color-mix(in srgb, white 2%, transparent); }
+
+  /* ── CALLOUTS ── */
+  .tip {
+    background: color-mix(in srgb, #60A5FA 6%, var(--bg2));
+    border-left: 3px solid #60A5FA;
+    border-radius: 0 4px 4px 0;
+    padding: .9rem 1.1rem; margin: 1rem 0 1.5rem;
+    font-size: .9rem; font-style: italic; color: #9ab8d4;
+  }
+  .tip strong { color: #60A5FA; font-style: normal; }
+
+  .warn {
+    background: color-mix(in srgb, var(--accent) 6%, var(--bg2));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    padding: .9rem 1.1rem; margin: 1rem 0 1.5rem;
+    font-size: .9rem; color: #c9a96e;
+  }
+  .warn strong { color: var(--accent); }
+
+  /* ── DIAGRAM ── */
+  .diagram {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.4rem;
+    margin: 1rem 0 1.4rem;
+    overflow-x: auto;
+  }
+  .diagram pre { margin: 0; border: none; padding: 0; background: transparent; }
+  .diagram pre code { color: var(--muted); font-size: .8rem; }
+  .diagram pre code .hl { color: var(--accent); }
+
+  /* ── COMMAND REF ── */
+  .cmd-ref {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .cmd-ref h4 {
+    font-family: var(--mono); font-size: .65rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .9rem;
+  }
+  .cmd-row {
+    display: flex; align-items: baseline;
+    gap: 1rem; padding: .32rem 0;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono); font-size: .8rem;
+  }
+  .cmd-row:last-child { border-bottom: none; }
+  .cmd-key  { color: var(--accent); min-width: 220px; flex-shrink: 0; }
+  .cmd-desc { color: var(--muted); }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.35rem 1.6rem;
+    margin-top: 2.5rem;
+  }
+  .checklist h4 {
+    font-family: var(--mono); font-size: .7rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 1rem;
+  }
+  .checklist ul { list-style: none; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: .75rem;
+    padding: .38rem 0; font-size: .9rem; color: #b0bec8;
+    border-bottom: 1px solid var(--border);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .check { color: var(--accent); font-size: .85rem; margin-top: .05rem; flex-shrink: 0; }
+
+  /* ── GOLDEN RULE ── */
+  .golden {
+    background: color-mix(in srgb, var(--accent) 7%, var(--bg2));
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-radius: 4px;
+    padding: 1.4rem 1.6rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+  .golden .label {
+    font-family: var(--mono); font-size: .65rem;
+    letter-spacing: .2em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: .6rem;
+  }
+  .golden p {
+    font-size: 1rem; font-style: italic;
+    color: #dde5ed; margin: 0; line-height: 1.6;
+  }
+
+  /* ── NEXT DAY ── */
+  .next {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 1.25rem 1.6rem;
+    display: flex; align-items: center; gap: 1.25rem;
+    margin-top: 3rem;
+  }
+  .next-icon { font-size: 2rem; flex-shrink: 0; }
+  .next-label {
+    font-family: var(--mono); font-size: .65rem;
+    letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: .25rem;
+  }
+  .next-title { font-size: 1rem; color: #e8edf2; font-weight: 600; }
+  .next-sub { font-size: .85rem; color: var(--muted); font-style: italic; margin-top: .2rem; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    text-align: center; padding: 2.5rem 2rem;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono); font-size: .68rem;
+    letter-spacing: .12em; color: var(--muted);
+    text-transform: uppercase;
+  }
+  footer span { color: var(--accent); }
+
+  @media print {
+    body { background: #fff; color: #111; }
+    nav, footer, .next { display: none; }
+    pre { border: 1px solid #ccc; background: #f5f5f5; }
+    pre code { color: #333; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo"><span>~/</span>python-journey</div>
+  <div class="nav-links">
+    <a href="#recap">Recap</a>
+    <a href="#step1">git init</a>
+    <a href="#step3">Staging</a>
+    <a href="#step5">Commit</a>
+    <a href="#step6">Log</a>
+    <a href="#ref">Reference</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="eyebrow">Phase 1 · Week 1 · Learning Guide</div>
+  <h1>Day <em>4</em></h1>
+  <p class="sub">Git Basics — Your First Commit</p>
+  <div class="badge-row">
+    <span class="badge">git init</span>
+    <span class="badge">git status</span>
+    <span class="badge">git add</span>
+    <span class="badge">git commit</span>
+    <span class="badge">git log</span>
+    <span class="badge">git diff</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- RECAP -->
+  <div class="recap" id="recap">
+    <div class="recap-label">🧠 Quick Recap from Day 3</div>
+    <p style="margin-bottom:.75rem; font-size:.9rem; color:var(--muted); font-style:italic;">
+      Today we cover the first two steps of the daily developer cycle. Push comes on Day 6.
+    </p>
+    <pre><code>git add      →    git commit    →    git push
+(stage it)        (snapshot it)      (Day 6 — not yet)</code></pre>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step" id="step1">
+    <div class="step-heading">
+      <span class="step-num">STEP 01</span>
+      <h3>Initialize Git in Your Project</h3>
+    </div>
+    <p>Open VS Code, open the terminal via <strong>Terminal → New Terminal</strong>, and navigate to your project:</p>
+    <pre><code>cd ~/python-journey</code></pre>
+    <p>Now tell Git to start watching this folder:</p>
+    <pre><code>git init</code></pre>
+    <p>You'll see:</p>
+    <pre><code>Initialized empty Git repository in /Users/yourname/python-journey/.git/</code></pre>
+    <p>Git is now watching your folder. Confirm it created the hidden <code>.git</code> folder:</p>
+    <pre><code>ls -la</code></pre>
+    <pre><code>drwxr-xr-x   .git        ← Git lives here (never touch this)
+-rw-r--r--   hello.py
+-rw-r--r--   day2.py</code></pre>
+    <div class="tip">
+      <strong>💡 The .git folder</strong> is Git's brain. It stores every snapshot you ever make. You will <em>never</em> open or edit it manually — Git handles it entirely.
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step2">
+    <div class="step-heading">
+      <span class="step-num">STEP 02</span>
+      <h3>Check the Status — Your New Best Friend</h3>
+    </div>
+    <p>This command tells you exactly what Git sees right now:</p>
+    <pre><code>git status</code></pre>
+    <p>You'll see:</p>
+    <pre><code>On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+        day2.py
+        hello.py
+
+nothing added to commit but untracked files present</code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Message</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><code>Untracked files</code></td><td>Git can SEE these files but is NOT watching them yet</td></tr>
+          <tr><td><code>No commits yet</code></td><td>You haven't taken any snapshots yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn">
+      <strong>⭐ Golden habit:</strong> Run <code>git status</code> constantly — before and after every action. It always tells you exactly where you stand. Senior developers do this dozens of times a day.
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step3">
+    <div class="step-heading">
+      <span class="step-num">STEP 03</span>
+      <h3>Understand the Staging Area</h3>
+    </div>
+    <p>This is the concept most beginners skip — and then get confused later. There are <strong>3 zones</strong> in Git:</p>
+
+    <div class="diagram">
+      <pre><code>┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│  WORKING DIRECTORY    STAGING AREA        REPOSITORY        │
+│  (your files)         (waiting room)      (saved history)   │
+│                                                              │
+│  hello.py ──git add──► hello.py ──git commit──► 📸 Snapshot │
+│  day2.py                                                     │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘</code></pre>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Zone</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Working Directory</strong></td><td>Your actual files — where you write code</td></tr>
+          <tr><td><strong>Staging Area</strong></td><td>A waiting room — files chosen for the next snapshot</td></tr>
+          <tr><td><strong>Repository</strong></td><td>The saved history of all your snapshots</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Think of it like packing a box 📦:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Analogy</th><th>Git equivalent</th></tr></thead>
+        <tbody>
+          <tr><td>Your room (everything you own)</td><td>Working Directory</td></tr>
+          <tr><td>The box (what you're choosing to ship)</td><td>Staging Area</td></tr>
+          <tr><td>The delivery truck (sent &amp; saved)</td><td>Repository (commit history)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Analogy action</th></tr></thead>
+        <tbody>
+          <tr><td><code>git add</code></td><td>Put something in the box</td></tr>
+          <tr><td><code>git commit</code></td><td>Seal the box and label it</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="step4">
+    <div class="step-heading">
+      <span class="step-num">STEP 04</span>
+      <h3>Stage Your Files with git add</h3>
+    </div>
+    <p>Add <code>hello.py</code> to the staging area first:</p>
+    <pre><code>git add hello.py</code></pre>
+    <p>Now check the status again:</p>
+    <pre><code>git status</code></pre>
+    <pre><code>On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use "git rm --cached &lt;file&gt;..." to unstage)
+        new file:   hello.py
+
+Untracked files:
+        day2.py</code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Status message</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>Changes to be committed</code></td><td>hello.py is STAGED — in the box, ready to commit</td></tr>
+          <tr><td><code>Untracked files</code></td><td>day2.py is still NOT staged yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>Now add <code>day2.py</code> too — or use the shortcut that adds everything at once:</p>
+    <pre><code>git add .     # the dot means "add everything in this folder"</code></pre>
+    <p>Run <code>git status</code> once more — everything should now show under <em>"Changes to be committed"</em>.</p>
+  </div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="step5">
+    <div class="step-heading">
+      <span class="step-num">STEP 05</span>
+      <h3>Make Your First Commit 🎉</h3>
+    </div>
+    <p>Now seal the box and label it. This is your first ever snapshot:</p>
+    <pre><code>git commit -m "Initial commit: add hello.py and day2.py"</code></pre>
+    <p>You'll see:</p>
+    <pre><code>[master (root-commit) a3f9d12] Initial commit: add hello.py and day2.py
+ 2 files changed, 4 insertions(+)
+ create mode 100644 day2.py
+ create mode 100644 hello.py</code></pre>
+
+    <p>Breaking down the command:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Part</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><code>git commit</code></td><td>Take the snapshot</td></tr>
+          <tr><td><code>-m</code></td><td>Message flag — what follows is your description</td></tr>
+          <tr><td><code>"Initial commit..."</code></td><td>Your description of what this snapshot contains</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip">
+      <strong>💡 Congratulations!</strong> You just made your first Git commit. Every professional developer remembers this moment. It only gets easier from here.
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="step6">
+    <div class="step-heading">
+      <span class="step-num">STEP 06</span>
+      <h3>View Your History with git log</h3>
+    </div>
+    <p>See your snapshot in the time machine:</p>
+    <pre><code>git log</code></pre>
+    <pre><code>commit a3f9d12b4c7e8f1d2a3b4c5d6e7f8a9b0c1d2e3f
+Author: Your Name &lt;you@example.com&gt;
+Date:   Wed Apr 22 15:30:00 2026
+
+    Initial commit: add hello.py and day2.py</code></pre>
+    <p>That long string of letters and numbers is the <strong>commit hash</strong> — a unique ID for this snapshot, generated automatically by Git.</p>
+    <p>For a cleaner view use:</p>
+    <pre><code>git log --oneline</code></pre>
+    <pre><code>a3f9d12 Initial commit: add hello.py and day2.py</code></pre>
+    <div class="tip"><strong>💡 Tip:</strong> Use <code>git log --oneline</code> day-to-day. Use the full <code>git log</code> only when you need to see dates and author details.</div>
+  </div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="step7">
+    <div class="step-heading">
+      <span class="step-num">STEP 07</span>
+      <h3>Make a Second Commit — Practice the Full Cycle</h3>
+    </div>
+    <p>Open <code>hello.py</code> in VS Code and update it to:</p>
+    <pre><code>print("Hello! My Python journey starts today.")
+print("Day 4: I just learned Git!")</code></pre>
+    <p>Save it. Now in the terminal check what Git sees:</p>
+    <pre><code>git status</code></pre>
+    <pre><code>Changes not staged for commit:
+        modified:   hello.py</code></pre>
+    <p>Git noticed the change. Now do the full cycle:</p>
+    <pre><code>git add hello.py
+git commit -m "Update hello.py with Day 4 progress message"</code></pre>
+    <p>Check your history — you now have <strong>two commits</strong>:</p>
+    <pre><code>git log --oneline</code></pre>
+    <pre><code>b7c2e45 Update hello.py with Day 4 progress message
+a3f9d12 Initial commit: add hello.py and day2.py</code></pre>
+    <p>You have a real Git history. This is exactly what professional projects look like — just with many more commits.</p>
+  </div>
+
+  <!-- STEP 8 -->
+  <div class="step" id="step8">
+    <div class="step-heading">
+      <span class="step-num">STEP 08</span>
+      <h3>See Changes Before Staging — git diff</h3>
+    </div>
+    <p>Before staging a file you can see <em>exactly</em> what changed. Add a line to <code>day2.py</code>:</p>
+    <pre><code># add this at the bottom of day2.py:
+print("Git is starting to make sense!")</code></pre>
+    <p>Save it, then run:</p>
+    <pre><code>git diff</code></pre>
+    <p>You'll see something like:</p>
+    <pre><code><span class="diff-info">diff --git a/day2.py b/day2.py</span>
+<span class="diff-del">- print("VS Code is my new home!")</span>
+<span class="diff-add">+ print("VS Code is my new home!")</span>
+<span class="diff-add">+ print("Git is starting to make sense!")</span></code></pre>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Symbol</th><th>Colour</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>+</code></td><td style="color:#4ade80">Green</td><td>Added lines</td></tr>
+          <tr><td><code>-</code></td><td style="color:#f87171">Red</td><td>Removed lines</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>This tells you exactly what will go into your next commit before you make it. Now commit it:</p>
+    <pre><code>git add .
+git commit -m "Add encouraging message to day2.py"</code></pre>
+    <p>Run <code>git log --oneline</code> — you should now have <strong>three commits</strong> total. 🎉</p>
+  </div>
+
+  <hr class="divider"/>
+
+  <!-- COMMAND REFERENCE -->
+  <div class="cmd-ref" id="ref">
+    <h4>📋 Day 4 — Full Command Reference</h4>
+    <div class="cmd-row"><span class="cmd-key">git init</span><span class="cmd-desc">Start watching this folder with Git</span></div>
+    <div class="cmd-row"><span class="cmd-key">git status</span><span class="cmd-desc">What does Git see right now?</span></div>
+    <div class="cmd-row"><span class="cmd-key">git add &lt;file&gt;</span><span class="cmd-desc">Stage a specific file</span></div>
+    <div class="cmd-row"><span class="cmd-key">git add .</span><span class="cmd-desc">Stage ALL changed files at once</span></div>
+    <div class="cmd-row"><span class="cmd-key">git commit -m "msg"</span><span class="cmd-desc">Take the snapshot with a label</span></div>
+    <div class="cmd-row"><span class="cmd-key">git log</span><span class="cmd-desc">See full history with dates &amp; authors</span></div>
+    <div class="cmd-row"><span class="cmd-key">git log --oneline</span><span class="cmd-desc">See compact one-line history</span></div>
+    <div class="cmd-row"><span class="cmd-key">git diff</span><span class="cmd-desc">See what changed before staging</span></div>
+  </div>
+
+  <!-- GOLDEN RULE -->
+  <div class="golden">
+    <div class="label">💡 The Golden Rule of Commits</div>
+    <p>Commit early, commit often. A commit should represent one logical change — not a whole day's work. If your message needs the word <em>"and"</em> a lot, you probably should have made two commits.</p>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="checklist">
+    <h4>✅ Day 4 — Completion Checklist</h4>
+    <ul>
+      <li><span class="check">✓</span> Initialized Git in <code>python-journey</code> with <code>git init</code></li>
+      <li><span class="check">✓</span> Used <code>git status</code> to read what Git sees</li>
+      <li><span class="check">✓</span> Understood the 3 zones: Working Directory → Staging → Repository</li>
+      <li><span class="check">✓</span> Staged files with <code>git add</code> and <code>git add .</code></li>
+      <li><span class="check">✓</span> Made your <strong>first ever Git commit</strong></li>
+      <li><span class="check">✓</span> Viewed history with <code>git log</code> and <code>git log --oneline</code></li>
+      <li><span class="check">✓</span> Spotted changes before staging with <code>git diff</code></li>
+      <li><span class="check">✓</span> Made 3 commits total — a real working history</li>
+    </ul>
+  </div>
+
+  <!-- NEXT DAY -->
+  <div class="next">
+    <div class="next-icon">☁️</div>
+    <div>
+      <div class="next-label">Coming Up Next</div>
+      <div class="next-title">Day 5 — GitHub Account &amp; Your First Remote Repository</div>
+      <div class="next-sub">Create your GitHub account, make your first online repo, and understand local vs remote.</div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Python &amp; GitHub Journey · <span>Day 4</span> · 1 hour/day · macOS Edition
+</footer>
+
+</body>
+</html>
