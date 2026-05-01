@@ -1,5 +1,6 @@
 print("Hello! My Python Journey stars today!")
 print("I am excited to learn Python and explore its capabilities.")
-print("Day 4 I just learned Git!")
+print("Day 4: I just learned Git!")
+print("Day 5: My code is now live on Github!")
 print("goodbye")
 print("bye Wira")
