@@ -16,6 +16,7 @@
     --accent1:   #4ADE80;  /* green  — day 1 */
     --accent2:   #60A5FA;  /* blue   — day 2 */
     --accent3:   #F472B6;  /* pink   — day 3 */
+    --accent0:   #fb923c;  /* orange — git setup */
     --code-bg:   #0a0f14;
     --mono:      'JetBrains Mono', monospace;
     --serif:     'Lora', Georgia, serif;
@@ -30,7 +31,7 @@
     color: var(--text);
     font-family: var(--serif);
     font-size: 16px;
-    line-height: 1.75;
+    line-height: 1.78;
     min-height: 100vh;
   }
 
@@ -156,6 +157,9 @@
   .day1 .day-number { color: var(--accent1); }
   .day2 .day-number { color: var(--accent2); }
   .day3 .day-number { color: var(--accent3); }
+  .day0 .day-number { color: var(--accent0); }
+
+  .day0 .check { color: var(--accent0); }
 
   .day-meta {}
   .day-label {
@@ -394,15 +398,173 @@
     pre { border: 1px solid #ccc; background: #f5f5f5; }
     pre code { color: #333; }
     .tip, .warn { border-left-width: 3px; background: #f9f9f9; color: #444; }
+    .toc-sidebar { display: none; }
+  }
+
+  /* ── TOC SIDEBAR ── */
+  .toc-sidebar {
+    position: fixed;
+    top: 54px;
+    left: 0;
+    bottom: 0;
+    width: 248px;
+    z-index: 90;
+    background: rgba(8,12,16,.97);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 1.5rem 0 3rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .toc-sidebar::-webkit-scrollbar { width: 4px; }
+  .toc-sidebar::-webkit-scrollbar-track { background: transparent; }
+  .toc-sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .toc-day-label {
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    padding: 1rem 1.25rem .5rem;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+  }
+  .toc-day-label .toc-day-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .toc-d1 .toc-day-dot { background: var(--accent1); }
+  .toc-d2 .toc-day-dot { background: var(--accent2); }
+  .toc-d3 .toc-day-dot { background: var(--accent3); }
+  .toc-d0 .toc-day-dot { background: var(--accent0); }
+  .toc-d1 { color: var(--accent1); }
+  .toc-d2 { color: var(--accent2); }
+  .toc-d3 { color: var(--accent3); }
+  .toc-d0 { color: var(--accent0); }
+
+  .toc-sidebar a {
+    display: block;
+    font-family: var(--mono);
+    font-size: .8rem;
+    line-height: 1.35;
+    color: var(--muted);
+    text-decoration: none;
+    padding: .45rem 1.25rem .45rem 2rem;
+    border-left: 2px solid transparent;
+    transition: color .15s, border-color .15s, background .15s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .toc-sidebar a:hover {
+    color: var(--text);
+    background: rgba(255,255,255,.03);
+  }
+  .toc-sidebar a.toc-active-d1 { color: var(--accent1); border-left-color: var(--accent1); background: color-mix(in srgb, var(--accent1) 6%, transparent); }
+  .toc-sidebar a.toc-active-d2 { color: var(--accent2); border-left-color: var(--accent2); background: color-mix(in srgb, var(--accent2) 6%, transparent); }
+  .toc-sidebar a.toc-active-d3 { color: var(--accent3); border-left-color: var(--accent3); background: color-mix(in srgb, var(--accent3) 6%, transparent); }
+  .toc-sidebar a.toc-active-d0 { color: var(--accent0); border-left-color: var(--accent0); background: color-mix(in srgb, var(--accent0) 6%, transparent); }
+
+  .toc-sidebar .toc-section-link {
+    font-size: .75rem;
+    padding-left: 1.25rem;
+    color: var(--muted);
+    opacity: .75;
+    letter-spacing: .04em;
+  }
+  .toc-sidebar .toc-section-link:hover { opacity: 1; color: var(--text); }
+
+  .toc-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: .7rem 1.25rem;
+    opacity: .5;
+  }
+
+  /* Push content right to make room for sidebar */
+  @media (min-width: 960px) {
+    .hero       { padding-left: calc(248px + 2.5rem); text-align: left; }
+    .pill-row   { justify-content: flex-start; }
+    main        { margin-left: 248px; }
+    footer      { padding-left: calc(248px + 2rem); text-align: left; }
+  }
+
+  @media (max-width: 959px) {
+    .toc-sidebar { display: none; }
   }
 </style>
 </head>
 <body>
 
+<!-- TOC SIDEBAR -->
+<aside class="toc-sidebar" id="tocSidebar">
+
+  <!-- Git Setup -->
+  <div class="toc-day-label toc-d0">
+    <span class="toc-day-dot"></span>Prerequisites — Install Git
+  </div>
+  <a href="#git-setup" class="toc-section-link">↳ Section overview</a>
+  <a href="#gs1" data-day="0">01 · Check if Git exists</a>
+  <a href="#gs2" data-day="0">02 · Install via Xcode CLT</a>
+  <a href="#gs3" data-day="0">03 · Install via Homebrew</a>
+  <a href="#gs4" data-day="0">04 · Verify installation</a>
+  <a href="#gs5" data-day="0">05 · First-time config</a>
+  <a href="#gs6" data-day="0">06 · Set VS Code as editor</a>
+  <a href="#gs7" data-day="0">07 · Verify your config</a>
+
+  <hr class="toc-divider"/>
+
+  <!-- Day 1 -->
+  <div class="toc-day-label toc-d1">
+    <span class="toc-day-dot"></span>Day 1 — Environment Setup
+  </div>
+  <a href="#day1" class="toc-section-link">↳ Day overview</a>
+  <a href="#d1s1" data-day="1">01 · Open VS Code</a>
+  <a href="#d1s2" data-day="1">02 · Built-in Terminal</a>
+  <a href="#d1s3" data-day="1">03 · 3 Essential Shortcuts</a>
+  <a href="#d1s4" data-day="1">04 · Install Extensions</a>
+  <a href="#d1s5" data-day="1">05 · Create Project Folder</a>
+  <a href="#d1s6" data-day="1">06 · First Python File</a>
+
+  <hr class="toc-divider"/>
+
+  <!-- Day 2 -->
+  <div class="toc-day-label toc-d2">
+    <span class="toc-day-dot"></span>Day 2 — VS Code Essentials
+  </div>
+  <a href="#day2" class="toc-section-link">↳ Day overview</a>
+  <a href="#d2s1" data-day="2">01 · 6 Daily Shortcuts</a>
+  <a href="#d2s2" data-day="2">02 · Explore the Sidebar</a>
+  <a href="#d2s3" data-day="2">03 · Create day2.py</a>
+  <a href="#d2s4" data-day="2">04 · Auto Save</a>
+  <a href="#d2s5" data-day="2">05 · JetBrains Mono Font</a>
+  <a href="#d2s6" data-day="2">06 · Color Theme</a>
+  <a href="#d2s7" data-day="2">07 · Split Editor</a>
+
+  <hr class="toc-divider"/>
+
+  <!-- Day 3 -->
+  <div class="toc-day-label toc-d3">
+    <span class="toc-day-dot"></span>Day 3 — Understanding Git
+  </div>
+  <a href="#day3" class="toc-section-link">↳ Day overview</a>
+  <a href="#d3s1" data-day="3">01 · The Problem Git Solves</a>
+  <a href="#d3s2" data-day="3">02 · Time Machine Model</a>
+  <a href="#d3s3" data-day="3">03 · 3 Core Concepts</a>
+  <a href="#d3s4" data-day="3">04 · Git vs GitHub</a>
+  <a href="#d3s5" data-day="3">05 · Preview Git History</a>
+  <a href="#d3s6" data-day="3">06 · Developer Workflow</a>
+
+</aside>
+
 <!-- NAV -->
 <nav>
   <div class="logo"><span>~/</span>python-journey</div>
   <div class="links">
+    <a href="#git-setup">Git Setup</a>
     <a href="#day1">Day 1</a>
     <a href="#day2">Day 2</a>
     <a href="#day3">Day 3</a>
@@ -415,6 +577,7 @@
   <h1>Python &amp; GitHub Journey<br/><em>Days 1 – 3</em></h1>
   <p class="sub">Your step-by-step notes from the first three days of the roadmap</p>
   <div class="pill-row">
+    <span class="pill" style="border-color:var(--accent0);color:var(--accent0);background:color-mix(in srgb,var(--accent0) 10%,transparent)">🔧 Prerequisites — Install Git</span>
     <span class="pill d1">⚙️ Day 1 — Environment Setup</span>
     <span class="pill d2">⚡ Day 2 — VS Code Essentials</span>
     <span class="pill d3">🔀 Day 3 — Understanding Git</span>
@@ -422,6 +585,165 @@
 </header>
 
 <main>
+
+<!-- ════════════════ GIT SETUP ════════════════ -->
+<section class="day day0" id="git-setup">
+  <div class="day-header">
+    <div class="day-number" style="font-size:1.8rem;margin-top:.3rem;">PRE</div>
+    <div class="day-meta">
+      <div class="day-label" style="color:var(--accent0)">Prerequisites · Before Day 1</div>
+      <div class="day-title">Installing &amp; Configuring Git on macOS</div>
+      <div class="day-subtitle">Check, install, verify, and set up Git for the very first time</div>
+    </div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="step" id="gs1">
+    <div class="step-heading">
+      <span class="step-num">STEP 01</span>
+      <h3>Check if Git is Already Installed</h3>
+    </div>
+    <p>macOS ships with a system Git bundled inside Xcode Command Line Tools. Before installing anything, check what you already have:</p>
+    <pre><code>git --version</code></pre>
+    <p>You'll see one of two outcomes:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Output</th><th>Meaning</th><th>What to do</th></tr></thead>
+        <tbody>
+          <tr><td><code>git version 2.x.x</code></td><td>Git is installed ✅</td><td>Skip to Step 4 to verify properly, then Step 5 to configure</td></tr>
+          <tr><td><code>command not found: git</code></td><td>Git is not installed</td><td>Continue to Step 2 or Step 3</td></tr>
+          <tr><td>A dialog box appears asking to install developer tools</td><td>macOS detected the missing tool</td><td>Click <strong>Install</strong> — this runs Step 2 automatically</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip"><strong>💡 Note:</strong> macOS's system Git is often outdated (version 2.24 or older). It works fine for learning, but installing a fresh version via Homebrew (Step 3) gives you the latest features.</div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step" id="gs2">
+    <div class="step-heading">
+      <span class="step-num">STEP 02</span>
+      <h3>Install Git via Xcode Command Line Tools</h3>
+    </div>
+    <p>This is the simplest method — it installs Git (plus other developer tools) directly from Apple. Run in your terminal:</p>
+    <pre><code>xcode-select --install</code></pre>
+    <p>A dialog box will appear on screen. Click <strong>Install</strong> (not "Get Xcode"). This downloads about 400 MB and takes 3–10 minutes depending on your connection.</p>
+    <p>Once it finishes, confirm it worked:</p>
+    <pre><code>git --version</code></pre>
+    <div class="warn"><strong>⚠️ Already installed?</strong> If you see <em>"xcode-select: error: command line tools are already installed"</em> — that's fine. Git is already there. Run <code>git --version</code> to confirm.</div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step" id="gs3">
+    <div class="step-heading">
+      <span class="step-num">STEP 03</span>
+      <h3>Install Git via Homebrew <span style="color:var(--muted);font-weight:400;font-size:.9em">(Recommended — Gets the Latest Version)</span></h3>
+    </div>
+    <p>Homebrew is the package manager for macOS. It lets you install and update software from the command line. If you don't have Homebrew yet, install it first:</p>
+    <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+    <p>Once Homebrew is installed (or if you already have it), install Git:</p>
+    <pre><code>brew install git</code></pre>
+    <p>After installation, tell your shell to use the Homebrew Git (not Apple's old one). Add this to your <code>~/.zshrc</code>:</p>
+    <pre><code>export PATH="/opt/homebrew/bin:$PATH"   # Apple Silicon
+# or
+export PATH="/usr/local/bin:$PATH"       # Intel Mac</code></pre>
+    <p>Then reload your shell:</p>
+    <pre><code>source ~/.zshrc</code></pre>
+    <div class="tip"><strong>💡 Homebrew vs Xcode CLT:</strong> Use Homebrew if you want the latest Git (2.4x+), or if you plan to install other tools like <code>uv</code>, <code>node</code>, or <code>python</code> later. It's the professional approach.</div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step" id="gs4">
+    <div class="step-heading">
+      <span class="step-num">STEP 04</span>
+      <h3>Verify Your Git Installation</h3>
+    </div>
+    <p>Run both of these — the first confirms the version, the second shows exactly which Git binary your shell is using:</p>
+    <pre><code>git --version
+which git</code></pre>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Command</th><th>Good output</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td><code>git --version</code></td><td><code>git version 2.45.x</code> (or similar)</td><td>Git is installed and working</td></tr>
+          <tr><td><code>which git</code> (Homebrew)</td><td><code>/opt/homebrew/bin/git</code></td><td>Using the Homebrew version ✅</td></tr>
+          <tr><td><code>which git</code> (Xcode CLT)</td><td><code>/usr/bin/git</code></td><td>Using Apple's bundled version</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tip"><strong>💡 Either path works.</strong> The Homebrew path just means a newer version. Both are fully functional for everything in this course.</div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step" id="gs5">
+    <div class="step-heading">
+      <span class="step-num">STEP 05</span>
+      <h3>First-Time Configuration — Do This Before Your First Commit</h3>
+    </div>
+    <p>Git needs to know who you are before it can record any commits. These three commands set your identity globally — they apply to every project on your Mac:</p>
+    <pre><code>git config --global user.name "Your Full Name"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main</code></pre>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Setting</th><th>Why it matters</th></tr></thead>
+        <tbody>
+          <tr><td><code>user.name</code></td><td>Attached to every commit you make — visible on GitHub. Use your real name.</td></tr>
+          <tr><td><code>user.email</code></td><td>Must match your GitHub account email so commits link to your profile correctly.</td></tr>
+          <tr><td><code>init.defaultBranch main</code></td><td>Makes new repos start on <code>main</code> instead of the old default <code>master</code>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="warn"><strong>⚠️ Use your real GitHub email.</strong> If they don't match, your commits won't show up on your GitHub contribution graph — the green squares won't appear.</div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step" id="gs6">
+    <div class="step-heading">
+      <span class="step-num">STEP 06</span>
+      <h3>Set VS Code as Git's Default Editor</h3>
+    </div>
+    <p>By default Git opens <code>vim</code> when it needs you to write a commit message — which can be confusing for beginners. Set VS Code instead:</p>
+    <pre><code>git config --global core.editor "code --wait"</code></pre>
+    <p>The <code>--wait</code> flag tells Git to pause until you close the VS Code tab. Now whenever Git needs a message from you, a familiar editor will open instead of the terminal.</p>
+    <div class="tip"><strong>💡 Test it:</strong> Run <code>git commit</code> inside any git repo (without <code>-m</code>) and VS Code should open a file called <code>COMMIT_EDITMSG</code>. Write your message, save, and close the tab.</div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step" id="gs7">
+    <div class="step-heading">
+      <span class="step-num">STEP 07</span>
+      <h3>Verify Your Full Configuration</h3>
+    </div>
+    <p>Review everything you've just set up with one command:</p>
+    <pre><code>git config --global --list</code></pre>
+    <p>You should see output like this:</p>
+    <pre><code>user.name=Your Full Name
+user.email=you@example.com
+init.defaultbranch=main
+core.editor=code --wait</code></pre>
+    <p>You can also check a single value at any time:</p>
+    <pre><code>git config --global user.email</code></pre>
+    <div class="tip"><strong>💡 Made a typo?</strong> Just re-run the same <code>git config --global</code> command with the correct value — it overwrites the old one automatically.</div>
+
+    <!-- Checklist -->
+    <div class="checklist" style="margin-top:2rem;">
+      <h4>✅ Git Setup — Completion Checklist</h4>
+      <ul>
+        <li><span class="check">✓</span> Checked whether Git was already installed with <code>git --version</code></li>
+        <li><span class="check">✓</span> Installed Git via Xcode CLT or Homebrew</li>
+        <li><span class="check">✓</span> Confirmed installation path with <code>which git</code></li>
+        <li><span class="check">✓</span> Set <code>user.name</code> and <code>user.email</code> matching your GitHub account</li>
+        <li><span class="check">✓</span> Set <code>init.defaultBranch</code> to <code>main</code></li>
+        <li><span class="check">✓</span> Set VS Code as the default Git editor</li>
+        <li><span class="check">✓</span> Verified everything with <code>git config --global --list</code></li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+<hr class="divider"/>
 
 <!-- ════════════════ DAY 1 ════════════════ -->
 <section class="day day1" id="day1">
@@ -435,7 +757,7 @@
   </div>
 
   <!-- Step 1 -->
-  <div class="step">
+  <div class="step" id="d1s1">
     <div class="step-heading">
       <span class="step-num">STEP 01</span>
       <h3>Open VS Code &amp; Learn the Layout</h3>
@@ -464,7 +786,7 @@
   </div>
 
   <!-- Step 2 -->
-  <div class="step">
+  <div class="step" id="d1s2">
     <div class="step-heading">
       <span class="step-num">STEP 02</span>
       <h3>Open the Built-in Terminal</h3>
@@ -479,7 +801,7 @@ python3 --version</code></pre>
   </div>
 
   <!-- Step 3 -->
-  <div class="step">
+  <div class="step" id="d1s3">
     <div class="step-heading">
       <span class="step-num">STEP 03</span>
       <h3>Learn 3 Essential Shortcuts</h3>
@@ -497,7 +819,7 @@ python3 --version</code></pre>
   </div>
 
   <!-- Step 4 -->
-  <div class="step">
+  <div class="step" id="d1s4">
     <div class="step-heading">
       <span class="step-num">STEP 04</span>
       <h3>Install 3 Essential Extensions</h3>
@@ -516,7 +838,7 @@ python3 --version</code></pre>
   </div>
 
   <!-- Step 5 -->
-  <div class="step">
+  <div class="step" id="d1s5">
     <div class="step-heading">
       <span class="step-num">STEP 05</span>
       <h3>Create Your Project Folder</h3>
@@ -530,7 +852,7 @@ code .                 # open this folder in VS Code</code></pre>
   </div>
 
   <!-- Step 6 -->
-  <div class="step">
+  <div class="step" id="d1s6">
     <div class="step-heading">
       <span class="step-num">STEP 06</span>
       <h3>Create &amp; Run Your First Python File</h3>
@@ -571,7 +893,7 @@ code .                 # open this folder in VS Code</code></pre>
   </div>
 
   <!-- Step 1 -->
-  <div class="step">
+  <div class="step" id="d2s1">
     <div class="step-heading">
       <span class="step-num">STEP 01</span>
       <h3>The 6 Shortcuts You'll Use Every Day</h3>
@@ -594,7 +916,7 @@ code .                 # open this folder in VS Code</code></pre>
   </div>
 
   <!-- Step 2 -->
-  <div class="step">
+  <div class="step" id="d2s2">
     <div class="step-heading">
       <span class="step-num">STEP 02</span>
       <h3>Open Your Project &amp; Explore the Sidebar</h3>
@@ -617,7 +939,7 @@ code .</code></pre>
   </div>
 
   <!-- Step 3 -->
-  <div class="step">
+  <div class="step" id="d2s3">
     <div class="step-heading">
       <span class="step-num">STEP 03</span>
       <h3>Create day2.py &amp; Run It Two Ways</h3>
@@ -639,7 +961,7 @@ VS Code is my new home!</code></pre>
   </div>
 
   <!-- Step 4 -->
-  <div class="step">
+  <div class="step" id="d2s4">
     <div class="step-heading">
       <span class="step-num">STEP 04</span>
       <h3>Turn On Auto Save</h3>
@@ -654,7 +976,7 @@ VS Code is my new home!</code></pre>
   </div>
 
   <!-- Step 5 -->
-  <div class="step">
+  <div class="step" id="d2s5">
     <div class="step-heading">
       <span class="step-num">STEP 05</span>
       <h3>Set JetBrains Mono as Your Font</h3>
@@ -675,7 +997,7 @@ VS Code is my new home!</code></pre>
   </div>
 
   <!-- Step 6 -->
-  <div class="step">
+  <div class="step" id="d2s6">
     <div class="step-heading">
       <span class="step-num">STEP 06</span>
       <h3>Change the Color Theme</h3>
@@ -690,7 +1012,7 @@ VS Code is my new home!</code></pre>
   </div>
 
   <!-- Step 7 -->
-  <div class="step">
+  <div class="step" id="d2s7">
     <div class="step-heading">
       <span class="step-num">STEP 07</span>
       <h3>Split the Editor — Your Superpower 🦸</h3>
@@ -745,7 +1067,7 @@ VS Code is my new home!</code></pre>
   </div>
 
   <!-- Step 1 -->
-  <div class="step">
+  <div class="step" id="d3s1">
     <div class="step-heading">
       <span class="step-num">STEP 01</span>
       <h3>The Problem Git Solves</h3>
@@ -760,7 +1082,7 @@ essay_ACTUALLY_final_fixed.docx</code></pre>
   </div>
 
   <!-- Step 2 -->
-  <div class="step">
+  <div class="step" id="d3s2">
     <div class="step-heading">
       <span class="step-num">STEP 02</span>
       <h3>The Best Mental Model — A Time Machine 🕰️</h3>
@@ -774,7 +1096,7 @@ essay_ACTUALLY_final_fixed.docx</code></pre>
   </div>
 
   <!-- Step 3 — Core Concepts -->
-  <div class="step">
+  <div class="step" id="d3s3">
     <div class="step-heading">
       <span class="step-num">STEP 03</span>
       <h3>The 3 Core Concepts — Learn These Cold</h3>
@@ -815,7 +1137,7 @@ essay_ACTUALLY_final_fixed.docx</code></pre>
   </div>
 
   <!-- Step 4 -->
-  <div class="step">
+  <div class="step" id="d3s4">
     <div class="step-heading">
       <span class="step-num">STEP 04</span>
       <h3>Git vs GitHub — Not the Same Thing</h3>
@@ -835,7 +1157,7 @@ essay_ACTUALLY_final_fixed.docx</code></pre>
   </div>
 
   <!-- Step 5 -->
-  <div class="step">
+  <div class="step" id="d3s5">
     <div class="step-heading">
       <span class="step-num">STEP 05</span>
       <h3>Preview a Real Git History</h3>
@@ -856,7 +1178,7 @@ rm -rf cpython</code></pre>
   </div>
 
   <!-- Step 6 -->
-  <div class="step">
+  <div class="step" id="d3s6">
     <div class="step-heading">
       <span class="step-num">STEP 06</span>
       <h3>The Developer Workflow — Preview</h3>
@@ -903,5 +1225,52 @@ rm -rf cpython</code></pre>
   <span>1 hour/day</span> · macOS Edition
 </footer>
 
+<script>
+  /* ── Smooth anchor scroll (accounts for sticky nav height) ── */
+  const NAV_H = 54;
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', e => {
+      const id = link.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      const top = target.getBoundingClientRect().top + window.scrollY - NAV_H - 12;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  });
+
+  /* ── Active TOC link on scroll ── */
+  const stepIds = [
+    'gs1','gs2','gs3','gs4','gs5','gs6','gs7',
+    'd1s1','d1s2','d1s3','d1s4','d1s5','d1s6',
+    'd2s1','d2s2','d2s3','d2s4','d2s5','d2s6','d2s7',
+    'd3s1','d3s2','d3s3','d3s4','d3s5','d3s6'
+  ];
+
+  const tocLinks = document.querySelectorAll('.toc-sidebar a[data-day]');
+
+  function setActive(id) {
+    tocLinks.forEach(a => {
+      a.classList.remove('toc-active-d0','toc-active-d1','toc-active-d2','toc-active-d3');
+    });
+    const active = document.querySelector(`.toc-sidebar a[href="#${id}"]`);
+    if (!active) return;
+    const day = active.dataset.day;
+    active.classList.add(`toc-active-d${day}`);
+    /* scroll TOC so active link is visible */
+    active.scrollIntoView({ block: 'nearest' });
+  }
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) setActive(entry.target.id);
+    });
+  }, { rootMargin: `-${NAV_H + 10}px 0px -60% 0px`, threshold: 0 });
+
+  stepIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+</script>
 </body>
 </html>
