@@ -134,12 +134,14 @@
     <div class="step-heading"><span class="step-num">STEP 01</span><h3>Finding Your Location (pwd)</h3></div>
     <p>Before you move, you need to know where you are. The <code>pwd</code> command prints the 'Working Directory' (your current folder).</p>
     <pre><code>pwd</code></pre>
-    <div class="tip"><strong>💡 Tip:</strong> In Terminal, your 'Home' folder is often represented by the tilde (~) symbol.</div>  </div>
+    <div class="tip"><strong>💡 Tip:</strong> In Terminal, your 'Home' folder is often represented by the tilde (~) symbol.</div>
+  </div>
   <div class="step" id="s1step2">
     <div class="step-heading"><span class="step-num">STEP 02</span><h3>Listing Files (ls)</h3></div>
     <p>To see what's inside your current folder, use <code>ls</code>. You can add flags like <code>-a</code> to see hidden files or <code>-l</code> for details.</p>
     <pre><code>ls -la</code></pre>
-    <div class="warn"><strong>⚠️ Warning:</strong> Hidden files in macOS usually start with a dot (.), like .bash_profile or .zshrc.</div>  </div>
+    <div class="warn"><strong>⚠️ Warning:</strong> Hidden files in macOS usually start with a dot (.), like .bash_profile or .zshrc.</div>
+  </div>
   <div class="step" id="s1step3">
     <div class="step-heading"><span class="step-num">STEP 03</span><h3>Changing Directories (cd)</h3></div>
     <p>Use <code>cd</code> followed by a path to move. Use <code>cd ..</code> to move up one level or <code>cd ~</code> to go home.</p>
@@ -154,18 +156,21 @@ cd ..</code></pre>
     <div class="step-heading"><span class="step-num">STEP 01</span><h3>Creating Folders (mkdir)</h3></div>
     <p>Create a new directory instantly with <code>mkdir</code>. If the name has spaces, wrap it in quotes.</p>
     <pre><code>mkdir "My Projects"</code></pre>
-    <div class="tip"><strong>💡 Tip:</strong> You can create multiple folders at once: mkdir folder1 folder2 folder3</div>  </div>
+    <div class="tip"><strong>💡 Tip:</strong> You can create multiple folders at once: mkdir folder1 folder2 folder3</div>
+  </div>
   <div class="step" id="s2step2">
     <div class="step-heading"><span class="step-num">STEP 02</span><h3>Creating Files (touch)</h3></div>
     <p>The <code>touch</code> command is the fastest way to create a blank text or code file.</p>
     <pre><code>touch script.py</code></pre>
-    <div class="warn"><strong>⚠️ Warning:</strong> Be careful with file extensions; Terminal won't stop you from naming a file something nonsensical.</div>  </div>
+    <div class="warn"><strong>⚠️ Warning:</strong> Be careful with file extensions; Terminal won't stop you from naming a file something nonsensical.</div>
+  </div>
   <div class="step" id="s2step3">
     <div class="step-heading"><span class="step-num">STEP 03</span><h3>Removing Items (rm)</h3></div>
     <p>Delete files with <code>rm</code>. To delete a folder and everything inside it, use <code>rm -rf</code>.</p>
     <pre><code>rm file.txt
 rm -rf old_folder</code></pre>
-    <div class="warn"><strong>⚠️ Warning:</strong> Warning: The Terminal has no 'Trash' can. Deletions are permanent and immediate!</div>    <div class="checklist"><h4>✅ Section 02 — Checklist</h4><ul><li><span class="check">✓</span> Created a new directory for practice</li><li><span class="check">✓</span> Created a dummy file using touch</li><li><span class="check">✓</span> Safely deleted the practice files</li></ul></div>
+    <div class="warn"><strong>⚠️ Warning:</strong> Warning: The Terminal has no 'Trash' can. Deletions are permanent and immediate!</div>
+    <div class="checklist"><h4>✅ Section 02 — Checklist</h4><ul><li><span class="check">✓</span> Created a new directory for practice</li><li><span class="check">✓</span> Created a dummy file using touch</li><li><span class="check">✓</span> Safely deleted the practice files</li></ul></div>
   </div>
 </section><hr class="divider"/>
 <section class="section sec3" id="shortcuts">
@@ -174,14 +179,15 @@ rm -rf old_folder</code></pre>
     <div class="step-heading"><span class="step-num">STEP 01</span><h3>Clearing the View</h3></div>
     <p>If your screen gets too cluttered, use <code>clear</code> to start with a fresh blank slate.</p>
     <pre><code>clear</code></pre>
-    <div class="tip"><strong>💡 Tip:</strong> You can also press Cmd + K on macOS to wipe the scrollback buffer entirely.</div>  </div>
+    <div class="tip"><strong>💡 Tip:</strong> You can also press Cmd + K on macOS to wipe the scrollback buffer entirely.</div>
+  </div>
   <div class="step" id="s3step2">
-    <div class="step-heading"><span class="step-num">STEP 02</span><h3>Tab Completion & History</h3></div>
-    <p>Start typing a filename and press <b>Tab</b> to autocomplete it. Use the <b>Up Arrow</b> to cycle through previous commands.</p>
-    <pre><code># Type 'cd Des' then hit Tab
-cd Desktop/</code></pre>
-    <div class="shortcut-ref"><h4>Keyboard Shortcuts</h4><div class="shortcut-row"><span class="shortcut-key">Tab</span><span class="shortcut-desc">Autocomplete file/folder names</span></div><div class="shortcut-row"><span class="shortcut-key">Up / Down Arrow</span><span class="shortcut-desc">Cycle through command history</span></div><div class="shortcut-row"><span class="shortcut-key">Ctrl + C</span><span class="shortcut-desc">Abort/Cancel the current running command</span></div><div class="shortcut-row"><span class="shortcut-key">Ctrl + A / E</span><span class="shortcut-desc">Move cursor to Start / End of the line</span></div></div>
-    <div class="checklist"><h4>✅ Section 03 — Checklist</h4><ul><li><span class="check">✓</span> Used Tab to autocomplete a long folder name</li><li><span class="check">✓</span> Re-ran a command using the Up arrow</li><li><span class="check">✓</span> Cleared the terminal screen</li></ul></div>
+    <div class="step-heading"><span class="step-num">STEP 02</span><h3>Tab Completion & Deletion</h3></div>
+    <p>Start typing a filename and press <b>Tab</b> to autocomplete it. Use the <b>Up Arrow</b> to cycle through previous commands. To wipe out a mistake instantly, use the deletion shortcuts below.</p>
+    <pre><code># Delete entire line before cursor
+Control + U</code></pre>
+    <div class="shortcut-ref"><h4>Keyboard Shortcuts</h4><div class="shortcut-row"><span class="shortcut-key">Tab</span><span class="shortcut-desc">Autocomplete file/folder names</span></div><div class="shortcut-row"><span class="shortcut-key">Control + U</span><span class="shortcut-desc">Delete everything to the left of cursor</span></div><div class="shortcut-row"><span class="shortcut-key">Control + W</span><span class="shortcut-desc">Delete the last word typed</span></div><div class="shortcut-row"><span class="shortcut-key">Control + A / E</span><span class="shortcut-desc">Jump to Start / End of the line</span></div><div class="shortcut-row"><span class="shortcut-key">Up / Down Arrow</span><span class="shortcut-desc">Cycle through command history</span></div><div class="shortcut-row"><span class="shortcut-key">Control + C</span><span class="shortcut-desc">Abort/Cancel the current command</span></div></div>
+    <div class="checklist"><h4>✅ Section 03 — Checklist</h4><ul><li><span class="check">✓</span> Used Tab to autocomplete a long folder name</li><li><span class="check">✓</span> Successfully cleared a long line using Control+U</li><li><span class="check">✓</span> Re-ran a command using the Up arrow</li></ul></div>
   </div>
 </section><hr class="divider"/>
 
