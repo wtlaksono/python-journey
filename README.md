@@ -10,3 +10,4 @@ Learning 1 hour every day.
 - Day 4 ✅ First commit
 - Day 5 ✅ First push to GitHub
 - Day 6 ✅ Push and Pull
+- Day 7 ✅ Review the learned lesson about Git
