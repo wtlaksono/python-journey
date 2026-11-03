@@ -1,0 +1,7 @@
+print("day7_review.py")
+print("git add")
+print("git commit -m 'day7_review.py'")
+print("git push")
+print("git push")
+print("git pull")
+print("git log --oneline")
